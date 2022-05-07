@@ -32,3 +32,6 @@ CREATE TABLE joininfo(
 	joinpw VARCHAR(100) NOT NULL,
 	stream VARCHAR(200) NULL,
 ) ENGINE=INNODB;
+
+## Background Flask Webserver Running Command
+nohup python3 -u server.py &
