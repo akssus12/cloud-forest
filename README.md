@@ -34,4 +34,4 @@ CREATE TABLE joininfo(
 ) ENGINE=INNODB;
 
 ## Background Flask Webserver Running Command
-nohup python3 -u server.py &
+./auto_reboot.sh
