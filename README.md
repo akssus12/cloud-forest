@@ -20,18 +20,3 @@ application.run(host='0.0.0.0', port=5000, debug=True, threaded=True)
 When you try to check the value or results, you have to use logger
   - ex. logger.info(messages)
   - ex. logger.error(messages)
-
-## DB Schema and command
-CREATE DATABASE raonzena;
-USE raonzena;
-
-CREATE TABLE joininfo( 
-	id INT PRIMARY KEY AUTO_INCREMENT, 
-	joinid VARCHAR(100) NOT NULL, 
-	joinem VARCHAR(100) NOT NULL, 
-	joinpw VARCHAR(100) NOT NULL,
-	stream VARCHAR(200) NULL,
-) ENGINE=INNODB;
-
-## Background Flask Webserver Running Command
-./auto_reboot.sh
