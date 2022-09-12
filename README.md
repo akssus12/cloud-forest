@@ -20,3 +20,7 @@ application.run(host='0.0.0.0', port=5000, debug=True, threaded=True)
 When you try to check the value or results, you have to use logger
   - ex. logger.info(messages)
   - ex. logger.error(messages)
+
+## Add each source to your branch
+When you try to commit, push updates, please use your branch!
+  - currnet branch - yi(yeongil), yw(yeonwoo), gm(gyungmin)
