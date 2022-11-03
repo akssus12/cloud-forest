@@ -11,7 +11,7 @@ pip install opencv-python
 - OpenCV configurations
 
 ## Production mode
-application.run(host='0.0.0.0', port=5000, debug=False, threaded=True)
+application.run(host='0.0.0.0', port=5325, debug=False, threaded=True)
 
 ## Debugging mode(For testing)
 application.run(host='0.0.0.0', port=5000, debug=True, threaded=True)
