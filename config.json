@@ -1,6 +1,7 @@
 {
     "flask_settings":{
         "CAPTURE_PATH": "",
+	"CAPTURE_URL" : "",
         "SECRET_KEY": ""
     },
     "mysql_settings":{

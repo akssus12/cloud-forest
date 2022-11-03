@@ -8,6 +8,10 @@ import secrets
 import glob
 import utils as ut
 
+#상위경로 모듈(streamer) 사용위한 경로추가
+import sys
+sys.path.append('/home/onet')
+
 from flask import Flask, render_template, request, Response, stream_with_context, flash, make_response, session, jsonify
 from flask_bootstrap import Bootstrap
 # from flask_socketio import SocketIO, emit
@@ -28,12 +32,15 @@ mysql_settings = config_data['mysql_settings']
 mongo_settings = config_data['mongo_settings']
 
 CAPTURE_PATH = flask_settings['CAPTURE_PATH']
+CAPTURE_URL = flask_settings['CAPTURE_URL']
 SECRET_KEY = flask_settings['SECRET_KEY']
+
 MYSQL_HOST = mysql_settings['MYSQL_HOST']
 MYSQL_USER = mysql_settings['MYSQL_USER']
 MYSQL_PASSWORD = mysql_settings['MYSQL_PASSWORD']
 MYSQL_DB = mysql_settings['MYSQL_DB']
 MYSQL_CHARSET = mysql_settings['MYSQL_CHARSET']
+
 MONGO_HOST = mongo_settings['MONGO_HOST']
 MONGO_DB = mongo_settings['MONGO_DB']
 MONGO_COLLECTION = mongo_settings['MONGO_COLLECTION']
@@ -79,6 +86,7 @@ def set_nickname():
     nickNameByQuery = ""
     content = request.get_json()
     nickName = content['action']['params']['id_check_text']
+    print("nickname : " + nickName);
     
     global userid
     userid = str(nickName)
@@ -99,7 +107,8 @@ def get_image_nickname():
         splitByUrl = latest_file.split('/')
         finalImageUrl = "/" + splitByUrl[3] + "/" + splitByUrl[4]
 
-        imageUrl = "http://133.186.228.38" + finalImageUrl # 공통으로 빼야함!
+        imageUrl = "http://" + CAPTURE_RUL + finalImageUrl # 공통으로 빼야함! # If that url is not valid, add expectional logic!
+        logger.error("ImageURL : " + imageUrl)
         dataSend = ut.kakaoResponse_SimpleTextAndImage(imageUrl, "현재 사진이 없습니다.")
 
     return jsonify(dataSend)
@@ -121,6 +130,7 @@ def get_gauge_nickname():
         for gauge in gauge_raon:
             temperature = gauge["tmp"]
             humidity = gauge["hum"]
+        # If temp, humid is not generated, add expectional logic!
         finalText = "현재 식물 재배의 온도는 " + str(temperature) + "도, 습도는 " + str(humidity) + " 입니다."
         dataSend = ut.kakaoResponse_SimpleText(finalText)
 
@@ -133,7 +143,7 @@ def vaildate_nickname():
     content = request.get_json()
     nickName = content['value']['resolved']
     
-    streamByJoinId_SQL = "SELECT joinid, stream FROM raonzena.joininfo WHERE joinid = '{}'".format(str(nickName))
+    streamByJoinId_SQL = "SELECT nickname, rtsp_stream FROM cloudforest_pr.kakao_chatbot_join WHERE nickname = '{}'".format(str(nickName))
 
     try:
         connection = pymysql.connect(host=MYSQL_HOST, user=MYSQL_USER,
@@ -142,6 +152,7 @@ def vaildate_nickname():
             curs.execute(streamByJoinId_SQL)
             result = curs.fetchone()
             validateNickname = result[0]
+            logger.error("validateNickname : " + validateNickname);
     except Exception as e:
         logger.error("login check error " + str(e))
     finally:
@@ -159,4 +170,4 @@ def vaildate_nickname():
     return jsonify(dataSend)
 
 if __name__ == '__main__':
-    application.run(host='0.0.0.0', port=5000, debug=True, threaded=True)
+    application.run(host='0.0.0.0', port=5325, debug=True, threaded=True)
